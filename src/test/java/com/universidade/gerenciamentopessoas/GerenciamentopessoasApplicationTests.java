@@ -2,12 +2,13 @@ package com.universidade.gerenciamentopessoas;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-class GerenciamentopessoasApplicationTests {
+@ActiveProfiles("test")
+class GerenciamentoPessoasApplicationTests {
 
 	@Test
 	void contextLoads() {
 	}
-
 }
