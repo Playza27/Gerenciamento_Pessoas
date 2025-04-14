@@ -13,5 +13,4 @@ API para gerenciamento de pessoas em uma universidade, desenvolvida com Spring B
 
 ## Integrantes
 - Giulia Karolina
-<<<<<<< HEAD
 - Luis Felipe
