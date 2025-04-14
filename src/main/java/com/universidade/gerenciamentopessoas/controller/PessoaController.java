@@ -20,7 +20,7 @@ public class PessoaController {
     // POST: Criar uma pessoa
     @PostMapping
     public ResponseEntity<PessoaDTO> criarPessoa(@RequestBody PessoaDTO pessoaDTO) {
-        Pessoa pessoa = new Pessoa(pessoaDTO.getNome(), pessoaDTO.getIdade(), pessoaDTO.setId(), pessoaDTO.getCpf());
+        Pessoa pessoa = new Pessoa();
         pessoa.setNome(pessoaDTO.getNome());
         pessoa.setCpf(pessoaDTO.getCpf());
         pessoa.setIdade(pessoaDTO.getIdade());
