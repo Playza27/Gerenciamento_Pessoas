@@ -16,10 +16,11 @@ public class PessoaController {
     @Autowired
     private PessoaRepository pessoaRepository;
 
+
     // POST: Criar uma pessoa
     @PostMapping
     public ResponseEntity<PessoaDTO> criarPessoa(@RequestBody PessoaDTO pessoaDTO) {
-        Pessoa pessoa = new Pessoa();
+        Pessoa pessoa = new Pessoa(pessoaDTO.getNome(), pessoaDTO.getIdade(), pessoaDTO.setId(), pessoaDTO.getCpf());
         pessoa.setNome(pessoaDTO.getNome());
         pessoa.setCpf(pessoaDTO.getCpf());
         pessoa.setIdade(pessoaDTO.getIdade());
