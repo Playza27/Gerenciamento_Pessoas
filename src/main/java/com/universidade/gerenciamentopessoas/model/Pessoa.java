@@ -1,13 +1,13 @@
 package com.universidade.gerenciamentopessoas.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Table(name = "pessoas")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "pessoa")
+@Getter
+@Setter
 public class Pessoa {
 
     @Id
@@ -22,5 +22,4 @@ public class Pessoa {
 
     @Column(nullable = false)
     private Integer idade;
-
 }

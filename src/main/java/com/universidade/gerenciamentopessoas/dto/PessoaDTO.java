@@ -1,15 +1,14 @@
 package com.universidade.gerenciamentopessoas.dto;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class PessoaDTO {
 
     private Long id;
     private String nome;
     private String cpf;
     private Integer idade;
-
 }

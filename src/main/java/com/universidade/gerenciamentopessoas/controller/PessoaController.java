@@ -1,56 +1,62 @@
 package com.universidade.gerenciamentopessoas.controller;
 
 import com.universidade.gerenciamentopessoas.dto.PessoaDTO;
-import com.universidade.gerenciamentopessoas.model.Pessoa;
-import com.universidade.gerenciamentopessoas.repository.PessoaRepository;
+import com.universidade.gerenciamentopessoas.exception.PessoaNotFoundException;
+import com.universidade.gerenciamentopessoas.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/pessoas")
 public class PessoaController {
 
     @Autowired
-    private PessoaRepository pessoaRepository;
-
+    private PessoaService pessoaService;
 
     // POST: Criar uma pessoa
     @PostMapping
     public ResponseEntity<PessoaDTO> criarPessoa(@RequestBody PessoaDTO pessoaDTO) {
-        Pessoa pessoa = new Pessoa();
-        pessoa.setNome(pessoaDTO.getNome());
-        pessoa.setCpf(pessoaDTO.getCpf());
-        pessoa.setIdade(pessoaDTO.getIdade());
-
-        Pessoa pessoaSalva = pessoaRepository.save(pessoa);
-
-        PessoaDTO responseDTO = new PessoaDTO();
-        responseDTO.setId(pessoaSalva.getId());
-        responseDTO.setNome(pessoaSalva.getNome());
-        responseDTO.setCpf(pessoaSalva.getCpf());
-        responseDTO.setIdade(pessoaSalva.getIdade());
-
-        return ResponseEntity.ok(responseDTO);
+        PessoaDTO novaPessoa = pessoaService.criarPessoa(pessoaDTO);
+        return ResponseEntity.ok(novaPessoa);
     }
 
-    // GET: Buscar uma pessoa por ID
+    // GET: Buscar pessoa por ID
     @GetMapping("/{id}")
     public ResponseEntity<PessoaDTO> buscarPessoaPorId(@PathVariable Long id) {
-        Optional<Pessoa> pessoaOptional = pessoaRepository.findById(id);
-        if (pessoaOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Pessoa pessoa = pessoaOptional.get();
-        PessoaDTO pessoaDTO = new PessoaDTO();
-        pessoaDTO.setId(pessoa.getId());
-        pessoaDTO.setNome(pessoa.getNome());
-        pessoaDTO.setCpf(pessoa.getCpf());
-        pessoaDTO.setIdade(pessoa.getIdade());
-
+        PessoaDTO pessoaDTO = pessoaService.buscarPessoaPorId(id);
         return ResponseEntity.ok(pessoaDTO);
+    }
+
+    // PUT: Atualizar uma pessoa
+    @PutMapping("/{id}")
+    public ResponseEntity<PessoaDTO> atualizarPessoa(@PathVariable Long id, @RequestBody PessoaDTO pessoaDTO) {
+        PessoaDTO pessoaAtualizada = pessoaService.atualizarPessoa(id, pessoaDTO);
+        return ResponseEntity.ok(pessoaAtualizada);
+    }
+
+    // DELETE: Deletar uma pessoa
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarPessoa(@PathVariable Long id) {
+        pessoaService.deletarPessoa(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // GET: Buscar pessoas por nome e idade (ex.: Rafael e idade > 18)
+    @GetMapping("/buscar")
+    public ResponseEntity<List<PessoaDTO>> buscarPessoasPorNomeEIdade(
+            @RequestParam String nome,
+            @RequestParam Integer idade) {
+        List<PessoaDTO> pessoas = pessoaService.buscarPessoasPorNomeEIdade(nome, idade);
+        return ResponseEntity.ok(pessoas);
+    }
+
+    // Tratamento de exceção para PessoaNotFoundException
+    @ExceptionHandler(PessoaNotFoundException.class)
+    public ResponseEntity<String> handlePessoaNotFoundException(PessoaNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
